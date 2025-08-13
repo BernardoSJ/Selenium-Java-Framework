@@ -9,7 +9,7 @@ public class StorePage extends BasePage {
     private final By searchField = By.id("woocommerce-product-search-field-0");
     private final By searchButton = By.cssSelector("button[value='Search']");
     private final By titlePage = By.cssSelector(".woocommerce-products-header__title.page-title");
-    private final By viewCartLink = By.className("checkout-button");
+    private final By viewCartLink = By.cssSelector("a[title='View cart']");
 
 
     public StorePage(WebDriver driver) {

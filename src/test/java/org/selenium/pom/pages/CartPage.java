@@ -14,10 +14,10 @@ public class CartPage extends BasePage {
     }
 
     public String getProductName(){
-        return driver.findElement(productName).getTagName();
+        return driver.findElement(productName).getText();
     }
 
-    public CheckoutPage clickCheckoutButton(){
+    public CheckoutPage checkout(){
         driver.findElement(checkoutButton).click();
         return new CheckoutPage(driver);
     }
