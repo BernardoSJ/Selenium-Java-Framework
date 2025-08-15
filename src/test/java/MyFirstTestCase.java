@@ -1,21 +1,20 @@
-import org.openqa.selenium.By;
 import org.selenium.pom.base.BaseTest;
 import org.selenium.pom.objects.BillingAddress;
+import org.selenium.pom.objects.Product;
 import org.selenium.pom.pages.*;
+import org.selenium.pom.utils.JacksonUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
+
 
 public class MyFirstTestCase extends BaseTest {
 
     @Test
-    public void guestCheckoutUsingDirectBankTransfer() throws InterruptedException {
-        BillingAddress billingAddress = new BillingAddress().
-                setFirstName("demo").
-                setLastName("user").
-                setAddressLineOne("San Francisco").
-                setCity("San Francisco").
-                setPostalCode("94188").
-                setEmail("askomdch@gmail.com");
+    public void guestCheckoutUsingDirectBankTransfer() throws InterruptedException, IOException {
+        BillingAddress billingAddress = JacksonUtils.deserializeJson("myBillingAddress.json", BillingAddress.class);
+        Product product = new Product(1215);
 
         StorePage storePage = new HomePage(driver).
                 load().
@@ -23,16 +22,15 @@ public class MyFirstTestCase extends BaseTest {
                 search("Blue");
         Assert.assertEquals(storePage.getTitle(), "Search results: “Blue”");
 
-        storePage.clickAddToCartButton("Blue Shoes");
+        storePage.clickAddToCartButton(product.getName());
         Thread.sleep(5000);
         CartPage cartPage = storePage.clickViewCart();
-        Assert.assertEquals(cartPage.getProductName(), "Blue Shoes");
+        Assert.assertEquals(cartPage.getProductName(), product.getName());
 
         CheckoutPage checkoutPage = cartPage.
                 checkout().
                 setBillingAddress(billingAddress).
                 clickPlaceOrderButton();
-
         Thread.sleep(5000);
         Assert.assertEquals(checkoutPage.getNoticeMessage(), "Thank you. Your order has been received.");
 
