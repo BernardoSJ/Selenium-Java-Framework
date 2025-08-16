@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.selenium.pom.base.BasePage;
 import org.selenium.pom.objects.BillingAddress;
+import org.selenium.pom.objects.User;
 
 public class CheckoutPage extends BasePage {
 
@@ -71,7 +72,8 @@ public class CheckoutPage extends BasePage {
         return this;
     }
 
-    public CheckoutPage clickPlaceOrderButton(){
+    public CheckoutPage clickPlaceOrderButton() throws InterruptedException {
+        Thread.sleep(5000);
         driver.findElement(placeOrderButton).click();
         return this;
     }
@@ -82,13 +84,13 @@ public class CheckoutPage extends BasePage {
 
 
 
-    public CheckoutPage logUser(String username, String password) throws InterruptedException {
+    public CheckoutPage login(User user) throws InterruptedException {
         driver.findElement(loginButton).click();
         Thread.sleep(5000);
         driver.findElement(userNameField).clear();
-        driver.findElement(userNameField).sendKeys(username);
+        driver.findElement(userNameField).sendKeys(user.getUser());
         driver.findElement(passwordField).clear();
-        driver.findElement(passwordField).sendKeys(password);
+        driver.findElement(passwordField).sendKeys(user.getPassword());
         driver.findElement(loginButton2).click();
         return this;
     }
