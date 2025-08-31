@@ -2,9 +2,16 @@ package org.selenium.pom.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.selenium.pom.base.BasePage;
 import org.selenium.pom.objects.BillingAddress;
 import org.selenium.pom.objects.User;
+
+import java.time.Duration;
+import java.util.List;
 
 public class CheckoutPage extends BasePage {
 
@@ -21,14 +28,16 @@ public class CheckoutPage extends BasePage {
     private final By userNameField = By.id("username");
     private final By passwordField = By.id("password");
     private final By loginButton2 = By.name("login");
+    private final By overlay = By.cssSelector(".blockUI.blockOverlay");
 
     public CheckoutPage(WebDriver driver) {
         super(driver);
     }
 
     public CheckoutPage enterFirstName(String firstName){
-        driver.findElement(firstNameField).clear();
-        driver.findElement(firstNameField).sendKeys(firstName);
+        WebElement e = wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameField));
+        e.clear();
+        e.sendKeys(firstName);
         return this;
     }
 
@@ -72,8 +81,8 @@ public class CheckoutPage extends BasePage {
         return this;
     }
 
-    public CheckoutPage clickPlaceOrderButton() throws InterruptedException {
-        Thread.sleep(5000);
+    public CheckoutPage clickPlaceOrderButton() {
+        waitForOverlaysToDisappear(overlay);
         driver.findElement(placeOrderButton).click();
         return this;
     }
@@ -84,9 +93,8 @@ public class CheckoutPage extends BasePage {
 
 
 
-    public CheckoutPage login(User user) throws InterruptedException {
+    public CheckoutPage login(User user)  {
         driver.findElement(loginButton).click();
-        Thread.sleep(5000);
         driver.findElement(userNameField).clear();
         driver.findElement(userNameField).sendKeys(user.getUser());
         driver.findElement(passwordField).clear();
